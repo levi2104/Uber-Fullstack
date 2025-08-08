@@ -32,6 +32,9 @@ export const loginUser = async (req, res) => {
 
   const { email, password } = req.body
 
+  const isUserExist = await userModel.findOne({ email })
+  if(isUserExist) return res.status(400).json({ message: 'User already exists' })
+
   const user = await userModel.findOne({ email }).select('+password')
 
   if(!user){

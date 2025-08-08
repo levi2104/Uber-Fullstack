@@ -256,3 +256,106 @@ createdAt: {
 
 ---
 
+Here is a properly formatted `README.md` section for the `/captains/register` endpoint:
+
+---
+
+## `/captains/register` Endpoint
+
+### ✅ Description
+
+Registers a new **Captain** by:
+
+* Validating email, password, full name, and vehicle details
+* Hashing the password before storing
+* Saving captain info in the database
+* Returning a JWT token on successful registration
+
+---
+
+### 📬 HTTP Method
+
+`POST`
+
+---
+
+### 📦 Request Body
+
+```json
+{
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john@example.com",
+  "password": "strongpassword123",
+  "vehicle": {
+    "color": "Red",
+    "plate": "GJ01AB1234",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+---
+
+### 📥 Example Response
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6...",
+  "captain": {
+    "_id": "64a1c7b61f8fc9...",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john@example.com",
+    "status": "inactive",
+    "vehicle": {
+      "color": "Red",
+      "plate": "GJ01AB1234",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+---
+
+### 🚫 Error Responses
+
+#### 1. Validation Errors (Missing or invalid fields)
+
+```json
+{
+  "errors": [
+    {
+      "msg": "Invalid Email",
+      "param": "email"
+    }
+  ]
+}
+```
+
+#### 2. Captain Already Exists
+
+```json
+{
+  "message": "Captain already exists"
+}
+```
+
+---
+
+### 🧠 Notes
+
+* Passwords are hashed using `bcrypt` before saving.
+* JWT token is generated using `captain.generateAuthToken()`.
+* Vehicle types allowed: `car`, `motorcycle`, `auto`.
+* Default captain status is set to `'inactive'`.
+
+---
+

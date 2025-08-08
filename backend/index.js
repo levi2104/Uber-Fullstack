@@ -1,9 +1,12 @@
 import dotenv from 'dotenv'
 import express from "express";
 import cors from 'cors'
+import cookieParser from 'cookie-parser';
+
 import connectToDb from './db/db.js';
 import userRoutes from './routes/userRoutes.js'
-import cookieParser from 'cookie-parser';
+import captainRoutes from './routes/captainRoutes.js'
+
 
 dotenv.config();
 const port = process.env.PORT || 3000
@@ -21,6 +24,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/users', userRoutes)
+app.use('/captains', captainRoutes)
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`)
