@@ -359,3 +359,226 @@ Registers a new **Captain** by:
 
 ---
 
+## `/captains/login` Endpoint
+
+### ✅ Description
+
+Authenticates an existing **Captain** by:
+
+* Validating email and password format.
+* Checking if the captain exists in the database.
+* Verifying the provided password with the stored hashed password.
+* Returning a JWT token on successful authentication.
+
+---
+
+### 📬 HTTP Method
+
+`POST`
+
+---
+
+### 📦 Request Body
+
+```json
+{
+  "email": "john@example.com",
+  "password": "strongpassword123"
+}
+```
+
+---
+
+### 📥 Example Response
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6...",
+  "captain": {
+    "_id": "64a1c7b61f8fc9...",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john@example.com",
+    "status": "inactive",
+    "vehicle": {
+      "color": "Red",
+      "plate": "GJ01AB1234",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+---
+
+### 🚫 Error Responses
+
+#### 1. Validation Errors (Invalid email or short password)
+
+```json
+{
+  "errors": [
+    {
+      "msg": "Invalid Email",
+      "param": "email"
+    }
+  ]
+}
+```
+
+#### 2. Invalid Credentials
+
+```json
+{
+  "message": "Invalid email or password"
+}
+```
+
+---
+
+### 🧠 Notes
+
+* Password verification is done using `captain.comparePassword()`.
+* JWT token is generated using `captain.generateAuthToken()`.
+* The password is never returned in the response.
+
+---
+
+## `/captains/profile` Endpoint
+
+### ✅ Description
+
+Fetches the **logged-in Captain's profile**.
+
+---
+
+### 📬 HTTP Method
+
+`GET`
+
+---
+
+### 🔑 Authentication
+
+* Requires a valid JWT token provided either:
+
+  * In cookies (`token`), or
+  * In `Authorization` header as `Bearer <token>`.
+* Token must not be blacklisted.
+
+---
+
+### 📥 Example Response
+
+```json
+{
+  "captain": {
+    "_id": "64a1c7b61f8fc9...",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john@example.com",
+    "status": "inactive",
+    "vehicle": {
+      "color": "Red",
+      "plate": "GJ01AB1234",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+---
+
+### 🚫 Error Responses
+
+#### 1. Missing or Invalid Token
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+#### 2. Blacklisted Token
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+---
+
+### 🧠 Notes
+
+* This route is protected by `authCaptain` middleware.
+* Blacklisted tokens are denied access.
+
+---
+
+## `/captains/logout` Endpoint
+
+### ✅ Description
+
+Logs out a **Captain** by:
+
+* Adding the current JWT token to the blacklist.
+* Clearing the authentication cookie.
+
+---
+
+### 📬 HTTP Method
+
+`POST`
+
+---
+
+### 🔑 Authentication
+
+* Requires a valid JWT token (in cookies or `Authorization` header).
+* Token must not be blacklisted already.
+
+---
+
+### 📥 Example Response
+
+```json
+{
+  "message": "Logged Out"
+}
+```
+
+---
+
+### 🚫 Error Responses
+
+#### 1. Missing Token
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+#### 2. Blacklisted Token
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+---
+
+### 🧠 Notes
+
+* Blacklisted tokens automatically expire after **24 hours** (based on MongoDB TTL index).
+* Once blacklisted, the token cannot be reused for authentication.
+
+---
