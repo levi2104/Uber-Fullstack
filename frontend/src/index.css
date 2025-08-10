@@ -25,15 +25,3 @@
 .light-fonts{
   font-family: 'SF Pro Light', sans-serif !important;
 }
-
-::selection{
-  color: royalblue;
-}
-
-.custom-margin-help{
-  margin-right: 110px !important;
-}
-
-.custom-margin-accessories{
-  margin-right: 220px !important;
-}
