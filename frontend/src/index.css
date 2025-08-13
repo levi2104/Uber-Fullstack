@@ -5,7 +5,7 @@
 @font-face {
   font-family: 'SF Pro Light';
   src: 
-       url('/fonts/sf-pro-display-light_freefontdownload_org/sf-pro-display-light.otf') format('opentype');
+  url('/SF-Pro-Display/sf-pro-display-light.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
@@ -18,12 +18,25 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'SF Pro Bold';
+  src: 
+  url('/SF-Pro-Display/SFPRODISPLAYBOLD.OTF') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .regular-fonts{
   font-family: 'SF Pro Regular', sans-serif;
+  letter-spacing: 0.1px;
 }
 
 .light-fonts{
-  font-family: 'SF Pro Light', sans-serif !important;
+  font-family: 'SF Pro Light', sans-serif;
+}
+
+.bold-fonts{
+  font-family: 'SF Pro Bold', sans-serif;
 }
 
 ::selection{

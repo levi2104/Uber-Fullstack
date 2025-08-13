@@ -29,7 +29,15 @@ export const registerCaptain = async (req, res) => {
 
   const token = captain.generateAuthToken()
 
-  res.status(201).cookie('token', token).json({ token, captain })
+  res
+    .status(201)
+    .cookie("token", token, {
+      httpOnly: true, // can't be accessed by JS
+      secure: false, // true if using HTTPS
+      sameSite: "lax", // 'none' if you have different domains & using HTTPS
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    })
+    .json({ token, captain });
 }
 
 export const loginCaptain = async (req, res) => {
@@ -48,7 +56,15 @@ export const loginCaptain = async (req, res) => {
 
   const token = await captain.generateAuthToken()
 
-  res.status(200).cookie('token', token).json({ token, captain })
+  res
+    .status(200)
+    .cookie("token", token, {
+      httpOnly: true, // can't be accessed by JS
+      secure: false, // true if using HTTPS
+      sameSite: "lax", // 'none' if you have different domains & using HTTPS
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    })
+    .json({ token, captain });
 }
 
 export const getCaptainProfile = async (req, res) => {
@@ -57,8 +73,12 @@ export const getCaptainProfile = async (req, res) => {
 
 export const logoutCaptain = async (req, res) => {
   const token = req.cookies.token || req.headers.authorization.split(' ')[1]
-  
-  await blacklistTokenModel.create({ token })
+  console.log(token)
+  const existing = await blacklistTokenModel.findOne({ token })
+  console.log(existing)
+  if (!existing) {
+    await blacklistTokenModel.create({ token });
+  }
   
   res.clearCookie('token')
   res.status(200).json({ message: 'Logged Out' })

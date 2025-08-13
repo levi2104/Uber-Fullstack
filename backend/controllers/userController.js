@@ -9,6 +9,9 @@ export const registerUser = async (req, res) => {
 
   const { fullname, email, password } = req.body
 
+  const isUserExist = await userModel.findOne({ email })
+  if(isUserExist) return res.status(400).json({ message: 'User already exists' })
+
   const hashedPassword = await userModel.hashPassword(password)
 
   const user = await createUser({
@@ -20,7 +23,15 @@ export const registerUser = async (req, res) => {
 
   const token = user.generateAuthToken()
 
-  return res.status(201).cookie('token', token).json({ token, user })
+  res
+    .status(201)
+    .cookie("token", token, {
+      httpOnly: true, // can't be accessed by JS
+      secure: false, // true if using HTTPS
+      sameSite: "lax", // 'none' if you have different domains & using HTTPS
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    })
+    .json({ token, user });
 }
 
 export const loginUser = async (req, res) => {
@@ -32,25 +43,29 @@ export const loginUser = async (req, res) => {
 
   const { email, password } = req.body
 
-  const isUserExist = await userModel.findOne({ email })
-  if(isUserExist) return res.status(400).json({ message: 'User already exists' })
-
   const user = await userModel.findOne({ email }).select('+password')
 
   if(!user){
-    return res.status(401).json({ error: 'Invalid Email or Password'})
+    return res.status(401).json({ error: 'Invalid Email or Password' })
   }
 
   const isMatch = await user.comparePassword(password)
-  console.log(isMatch)
 
   if(!isMatch){
-    return res.status(401).json({ error: 'Invalid Email or Password'})
+    return res.status(401).json({ error: 'Invalid Email or Password' })
   }
 
   const token = user.generateAuthToken()
 
-  res.status(200).cookie('token', token).json({ token, user })
+  res
+    .status(200)
+    .cookie("token", token, {
+      httpOnly: true, // can't be accessed by JS
+      secure: false, // true if using HTTPS
+      sameSite: "lax", // 'none' if you have different domains & using HTTPS
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    })
+    .json({ token, user });
 }
 
 export const getUserProfile = async (req, res) => {
@@ -58,10 +73,11 @@ export const getUserProfile = async (req, res) => {
 }
 
 export const logoutUser = async (req, res) => {
-  res.clearCookie('token')
   const token = req.cookies.token || req.headers.authorization.split(' ')[1]
-
+  
   await blacklistTokenModel.create({ token })
+  
+  res.clearCookie('token')
 
   res.status(200).json({ message: 'Logged Out' })
 }

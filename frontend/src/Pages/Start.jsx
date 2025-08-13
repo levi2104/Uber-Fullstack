@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const Home = () => {
+const Start = () => {
   return (
     <div>
       <div className="bg-[url('https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/c5310f182519763.652f3606b64b0.jpg')] bg-cover bg-center h-screen pt-8 w-full flex flex-col justify-between">
@@ -20,4 +20,4 @@ const Home = () => {
   );
 }
 
-export default Home
+export default Start
