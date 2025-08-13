@@ -38,15 +38,3 @@
 .bold-fonts{
   font-family: 'SF Pro Bold', sans-serif;
 }
-
-::selection{
-  color: royalblue;
-}
-
-.custom-margin-help{
-  margin-right: 110px !important;
-}
-
-.custom-margin-accessories{
-  margin-right: 220px !important;
-}
