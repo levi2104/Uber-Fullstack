@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import "remixicon/fonts/remixicon.css";
 import Start from "./pages/Start";
 import UserLogin from "./pages/UserLogin";
 import UserSignup from "./pages/UserSignup";
@@ -8,6 +9,9 @@ import UserLogout from "./pages/UserLogout";
 import UserHome from "./pages/UserHome";
 import CaptainHome from "./pages/CaptainHome";
 import CaptainLogout from "./pages/CaptainLogout";
+import UserRiding from "./pages/UserRiding";
+import CaptainRiding from "./pages/CaptainRiding";
+
 
 const App = () => {
   return (
@@ -22,6 +26,8 @@ const App = () => {
         <Route path="/captain-login" element={<CaptainLogin />} />
         <Route path="/captain-logout" element={<CaptainLogout />} />
         <Route path="/captain-signup" element={<CaptainSignup />} />
+        <Route path="/user-riding" element={<UserRiding />} />
+        <Route path="/captain-riding" element={<CaptainRiding />} />
       </Routes>
     </div>
   );
