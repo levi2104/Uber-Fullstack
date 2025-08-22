@@ -1,34 +1,13 @@
-import dotenv from 'dotenv'
-import express from "express";
-import cors from 'cors'
-import cookieParser from 'cookie-parser';
+import express from 'express'
 
-import connectToDb from './db/db.js';
-import userRoutes from './routes/userRoutes.js'
-import captainRoutes from './routes/captainRoutes.js'
-
-
-dotenv.config();
-const port = process.env.PORT || 3000
 const app = express()
 
-connectToDb();
-
-app.use(cors({
-  origin: "http://localhost:5173", // frontend
-  credentials: true                // allow cookies
-}));
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(cookieParser())
-
 app.get('/', (req, res) => {
-  res.send('API Running')
+  res.send('Hello, World!')
 })
 
-app.use('/users', userRoutes)
-app.use('/captains', captainRoutes)
+const PORT = process.env.PORT || 3000;
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`)
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`)
 })
